@@ -1,0 +1,58 @@
+[
+    {
+        "score_SIE": 93.90914885601879,
+        "score_touch": 81.70137717618296,
+        "zong_score": 90.0740726952624,
+        "score_FMA": 16.0,
+        "score_MSS": 40.0,
+        "time": "2024-05-07 14:34:33"
+    },
+    {
+        "score_SIE": 80.0,
+        "score_touch": 90.0,
+        "zong_score": 88.0,
+        "score_FMA": 18.0,
+        "score_MSS": 40.0,
+        "time": "2024-05-07 14:43:27"
+    },
+    {
+        "score_SIE": 88.54,
+        "score_touch": 74.69,
+        "zong_score": 82.82300000000001,
+        "score_FMA": 15.0,
+        "score_MSS": 35.0,
+        "time": "2024-05-07 14:43:58"
+    },
+    {
+        "score_SIE": 96.5742,
+        "score_touch": 85.5129,
+        "zong_score": 87.78355,
+        "score_FMA": 17.0,
+        "score_MSS": 30.0,
+        "time": "2024-05-07 14:44:29"
+    },
+    {
+        "score_SIE": 75.1824,
+        "score_touch": 87.59281,
+        "zong_score": 76.850803,
+        "score_FMA": 11.0,
+        "score_MSS": 30.0,
+        "time": "2024-05-07 14:45:07"
+    },
+    {
+        "score_SIE": 75.1824,
+        "score_touch": 87.59281,
+        "zong_score": 76.850803,
+        "score_FMA": 11.0,
+        "score_MSS": 30.0,
+        "time": "2024-05-07 14:45:14"
+    },
+    {
+        "score_SIE": 93.90914885601879,
+        "score_touch": 81.67698693228053,
+        "zong_score": 90.06675562209168,
+        "score_FMA": 16.0,
+        "score_MSS": 40.0,
+        "time": "2024-05-29 13:01:03"
+    }
+]
