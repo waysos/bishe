@@ -24,6 +24,7 @@ import chaifen_shipin
 import test_hand_video
 import mediapipe_video
 import test
+import shendutuzhuanh
 
 from models.resnet import resnet18,resnet34,resnet50,resnet101
 from models.squeezenet import squeezenet1_1,squeezenet1_0
@@ -212,6 +213,113 @@ def hongse(idx, hand_joint_x, hand_joint_y, red, blue, frame_time, num):
             ten_or_more.append(flag_T)
 
         flag_T = 0
+
+    xiaohao_time = 0
+    for i in range(len(ten_or_more)-4):
+        if ten_or_more[i] and ten_or_more[i + 1] and ten_or_more[i + 2] and ten_or_more[i + 3] and ten_or_more[i + 4] == 1:
+            xiaohao_time = frame_time * (i + 1)
+            print("抵达按钮消耗时间: %f s" % xiaohao_time)
+            break
+    if xiaohao_time == 0:
+        print("未抵达红色按钮")
+        xiaohao_time = 100
+
+    # flag_T = 0
+    # # flag_F = 0
+    # ten_or_more = []
+    # for p in range(0, idx):
+    #     for i in range(len(neighbor_pixels[p])):
+    #         if neighbor_pixels[p][i] in blue[p]:
+    #             # if (117, 84) in red[i]:
+    #             flag_T = 1
+    #         # else:
+    #         #     flag_F = 0
+    #     if flag_T == 1:
+    #         print("第%d张图片是否达到蓝色按钮位置：" % (p + 1))
+    #         print('Ture')
+    #         ten_or_more.append(flag_T)
+    #     else:
+    #         print("第%d张图片是否达到蓝色按钮位置：" % (p + 1))
+    #         print('False')
+    #         ten_or_more.append(flag_T)
+    #     flag_T = 0
+
+    xiaohao_time_blue = 0
+    for i in range(len(ten_or_more)-4):
+        if ten_or_more[i] and ten_or_more[i + 1] and ten_or_more[i + 2] and ten_or_more[i + 3] and ten_or_more[i + 4] == 2:
+            xiaohao_time_blue = frame_time * (i + 1)
+            print("抵达按钮消耗时间: %f s" % xiaohao_time_blue)
+            break
+    if xiaohao_time_blue == 0:
+        print("未抵达蓝色按钮")
+        xiaohao_time_blue = 200
+
+
+    return xiaohao_time, xiaohao_time_blue
+
+
+def hongse_1(idx, hand_joint_x, hand_joint_y, red, blue, frame_time, num):
+    if num == 8:
+        path_img = 'D:\python_project\handpose_shibie\handpose_x-main\image_shi'
+    elif num == 4:
+        path_img = 'D:\python_project\handpose_shibie\handpose_x-main\image_mu'
+    elif num == 12:
+        path_img = 'D:\python_project\handpose_shibie\handpose_x-main\image_zhong'
+    elif num == 16:
+        path_img = 'D:\python_project\handpose_shibie\handpose_x-main\image_huan'
+    else:
+        path_img = 'D:\python_project\handpose_shibie\handpose_x-main\image_xiao'
+    ############# 判断是否到达红色标记坐标 ###################
+    radius = 15
+    neighbor_pixels = [[] for _ in range(idx)]
+    # 遍历以当前像素点为中心的周围区域
+    for p in range(0, idx):
+        for i in range(int(hand_joint_x[p][num] - radius), int(hand_joint_x[p][num] + radius + 1)):
+            for j in range(int(hand_joint_y[p][num] - radius), int(hand_joint_y[p][num] + radius + 1)):
+                # 计算当前像素点到中心像素点的距离
+                distance = ((i - hand_joint_x[p][num]) ** 2 + (j - hand_joint_y[p][num]) ** 2) ** 0.5
+                random_number = random.random()
+                # 如果距离小于等于半径，则将该像素点的坐标添加到列表中
+                if distance <= radius and random_number <= 0.5:
+                    neighbor_pixels[p].append((i, j))
+    # print(neighbor_pixels)
+
+    flag_T = 0
+    # flag_F = 0
+    ten_or_more = []
+    shendu_tu = []
+    for p in range(0, idx):
+
+        for i in range(len(neighbor_pixels[p])):
+            if neighbor_pixels[p][i] in red[p]:
+                # if (117, 84) in red[i]:
+                flag_T = 1
+
+            # else:
+            #     flag_F = 0
+            if neighbor_pixels[p][i] in blue[p]:
+                flag_T = 2
+        if flag_T == 1:
+            print("第%d张图片到达红色按钮位置：" % (p + 1))
+            ten_or_more.append(flag_T)
+        elif flag_T == 2:
+            print("第%d张图片到达蓝色按钮位置：" % (p + 1))
+            ten_or_more.append(flag_T)
+        else:
+            print("第%d张图片未达到按钮位置：" % (p + 1))
+            ten_or_more.append(flag_T)
+
+        flag_T = 0
+
+    for p in range(0, idx):
+        if ten_or_more[p] != 0:
+            path_shen = f"{path_img}\\{p}.jpg"
+            shen_img = shendutuzhuanh.image_to_depth(path_shen)
+            if shen_img[int(hand_joint_x[p][num]/6), int(hand_joint_y[p][num]/6)] == shen_img[int(hand_joint_x[p][num]/6)+1, int(hand_joint_y[p][num]/6)]:
+                break
+            else:
+                ten_or_more[p] = 0
+                break
 
     xiaohao_time = 0
     for i in range(len(ten_or_more)-4):
@@ -615,17 +723,17 @@ def zhongyao(test_video_path_muzhi_1, test_video_path_shizhi_1, test_video_path_
     # if xiaohao_time == 0:
     #     print("未抵达按钮")
     print("食指：")
-    time_8_red, time_8_blue = hongse(idx, hand_joint_x, hand_joint_y, red_shi, blue_shi, frame_time, 8)
+    time_8_red, time_8_blue = hongse_1(idx, hand_joint_x, hand_joint_y, red_shi, blue_shi, frame_time, 8)
     print("拇指：")
-    time_4_red, time_4_blue = hongse(idx_mu, hand_joint_x_mu, hand_joint_y_mu, red_mu, blue_mu, frame_time, 4)
+    time_4_red, time_4_blue = hongse_1(idx_mu, hand_joint_x_mu, hand_joint_y_mu, red_mu, blue_mu, frame_time, 4)
     print("中指：")
-    time_12_red, time_12_blue = hongse(idx_zhong, hand_joint_x_zhong, hand_joint_y_zhong, red_zhong, blue_zhong,
+    time_12_red, time_12_blue = hongse_1(idx_zhong, hand_joint_x_zhong, hand_joint_y_zhong, red_zhong, blue_zhong,
                                        frame_time, 12)
     print("环指：")
-    time_16_red, time_16_blue = hongse(idx_huan, hand_joint_x_huan, hand_joint_y_huan, red_huan, blue_huan, frame_time,
+    time_16_red, time_16_blue = hongse_1(idx_huan, hand_joint_x_huan, hand_joint_y_huan, red_huan, blue_huan, frame_time,
                                        16)
     print("小指：")
-    time_20_red, time_20_blue = hongse(idx_xiao, hand_joint_x_xiao, hand_joint_y_xiao, red_xiao, blue_xiao, frame_time,
+    time_20_red, time_20_blue = hongse_1(idx_xiao, hand_joint_x_xiao, hand_joint_y_xiao, red_xiao, blue_xiao, frame_time,
                                        20)
 
     socre_touch = touchs(time_8_red, time_8_blue, time_4_red, time_4_blue, time_12_red, time_12_blue, time_16_red,

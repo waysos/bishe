@@ -91,6 +91,7 @@ def med_model(model_path, test_video_path, vis, clear_path):
     # frames列表现在包含视频的所有帧，每个帧都是一个numpy数组
     handpose_xs = []
     handpose_ys = []
+    handpose_zs = []
 
     for i in range(len(frames)):
         numpy_frame_from_opencv = frames[i]
@@ -111,17 +112,21 @@ def med_model(model_path, test_video_path, vis, clear_path):
             # print(hand_mark)
             handpose_x = []
             handpose_y = []
+            handpose_z = []
             for j in range(0, 21):
                 if hand_mark != []:
                     handpose_x.append(hand_mark[0][j].x)
                     handpose_y.append(hand_mark[0][j].y)
+                    handpose_z.append(hand_mark[0][j].z)
                 else:
                     handpose_x.append(hand_mark_old[0][j].x)
                     handpose_y.append(hand_mark_old[0][j].y)
+                    handpose_z.append(hand_mark_old[0][j].z)
 
 
             handpose_xs.append(handpose_x)
             handpose_ys.append(handpose_y)
+            handpose_zs.append(handpose_z)
 
     # print(handpose_xs)
     # print(handpose_ys)
